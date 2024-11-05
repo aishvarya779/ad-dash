@@ -4,7 +4,7 @@ import Layout from '../components/Layout';
 const Menu = () => {
   return (
     <Layout>
-      <h1>Menu PAge</h1>
+      <h1>Menu Page</h1>
     </Layout>
   );
 };
