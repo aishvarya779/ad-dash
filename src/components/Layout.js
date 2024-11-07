@@ -1,11 +1,14 @@
 import React from 'react';
 import Header from './Header';
+import Footer from './Footer';
+import './../styles/CommonStyles.css';
 
 const Layout = ({ children }) => {
   return (
     <>
       <Header />
-      <div>{children}</div>
+      <div className='container'>{children}</div>
+      <Footer/>
     </>
   );
 };
