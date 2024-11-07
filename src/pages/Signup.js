@@ -23,13 +23,14 @@ import {
   Grid2,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import LoginBg from './../images/login_bg.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     height: '100vh',
   },
   image: {
-    backgroundImage: 'url(https://source.unsplash.com/random)',
+    backgroundImage: `url(${LoginBg})`,
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
