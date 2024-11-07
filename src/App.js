@@ -18,12 +18,12 @@ const App = () => {
       <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Login />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/menu" element={<Menu />} />
           <Route path="/signup" element={<Signup/>} />
-          <Route path="/login" element={<Login/>} />
+          <Route path="/home" element={<Home/>} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
