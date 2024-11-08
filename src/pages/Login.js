@@ -1,9 +1,9 @@
 import React from 'react';
-import Layout from '../components/Layout';
+// import Layout from '../components/Layout';
+import { Link } from 'react-router-dom';
 import {
   Typography,
   Checkbox,
-  Link,
   Paper,
   FormControlLabel,
   TextField,
@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
 const Login = () => {
   const classes = useStyles();
   return (
-    <Layout>
+    <>
       <Grid2 container component="main" className={classes.root}>
         <CssBaseline />
         <Grid2 item xs={false} size={{sm:4, md:7}} className={classes.image} />
@@ -104,12 +104,12 @@ const Login = () => {
               </Button>
               <Grid2 container sx={{display: 'flex', justifyContent: 'space-between'}}>
                 <Grid2 item xs>
-                  <Link href="#" variant="body2">
+                  <Link to={"#"} variant="body2">
                     Forgot password?
                   </Link>
                 </Grid2>
                 <Grid2 item>
-                  <Link href="/signup" variant="body2">
+                  <Link to={"/signup"} variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid2>
@@ -121,7 +121,7 @@ const Login = () => {
           </div>
         </Grid2>
       </Grid2>
-    </Layout>
+    </>
   );
 };
 

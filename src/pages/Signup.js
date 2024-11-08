@@ -9,11 +9,11 @@ import Layout from '../components/Layout';
 // import Link from '@mui/core/Link';
 // import Paper from '@mui/core/Paper';
 // import Box from '@mui/core/Box';
+import {Link} from 'react-router-dom';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {
   Typography,
   Checkbox,
-  Link,
   FormControlLabel,
   TextField,
   CssBaseline,
@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
 const Signup = () => {
   const classes = useStyles();
   return (
-    <Layout>
+    <>
       
         <Container component="main" maxWidth="xs">
           <CssBaseline />
@@ -136,7 +136,7 @@ const Signup = () => {
               </Button>
               <Grid2 container justify="flex-end">
                 <Grid2 item>
-                  <Link href="/" variant="body2">
+                  <Link to={"/login"} variant="body2">
                     Already have an account? Sign in
                   </Link>
                 </Grid2>
@@ -147,7 +147,7 @@ const Signup = () => {
         <MadeWithLove />
       </Box> */}
         </Container>
-    </Layout>
+    </>
   );
 };
 
