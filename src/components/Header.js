@@ -14,8 +14,10 @@ import './../styles/HeaderStyles.css';
 import { Divider, Drawer } from '@mui/material';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
+  const navigate = useNavigate();
   const [open,setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const openProfile = Boolean(anchorEl);
@@ -25,6 +27,12 @@ const Header = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
+  const logOut = () => {
+    localStorage.clear();
+    handleClose();
+    navigate('/login');
+  }
 
   const toggleDrawer = (toggleState) => {
     setOpen(toggleState);
@@ -111,7 +119,7 @@ const Header = () => {
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={handleClose}>Logout</MenuItem>
+              <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>

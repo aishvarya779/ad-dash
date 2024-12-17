@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import Layout from '../components/Layout';
 import { Link } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import {auth} from './../firebase';
 import {
   Typography,
   Checkbox,
@@ -15,6 +17,7 @@ import {
 import { makeStyles } from '@mui/styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LoginBg from './../images/login_bg.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,14 +49,43 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Login = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
+  const [loginForm, setLoginForm] = useState({
+    email:'',
+    password: ''
+  })
+  const SignInWithEmail = async (e) => {
+    e.preventDefault();
+    if (!loginForm.email || !loginForm.password) {
+      console.error("Provide Email and Password");
+      return;
+    }
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        loginForm.email,
+        loginForm.password
+      );
+
+      const user = userCredential.user;
+      console.log(user);
+      localStorage.setItem('login', user.accessToken)
+      navigate('/')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+    }
+  };
   return (
     <>
       <Grid2 container component="main" className={classes.root}>
         <CssBaseline />
-        <Grid2 item xs={false} size={{sm:4, md:7}} className={classes.image} />
+        <Grid2 size={{sm:4, md:7}} className={classes.image} />
         <Grid2
-          item
           size={{xs:12, sm:8, md:5}}
           component={Paper}
           elevation={6}
@@ -66,7 +98,7 @@ const Login = () => {
             <Typography component="h1" variant="h5">
               Sign in
             </Typography>
-            <form className={classes.form} noValidate>
+            <form className={classes.form} onSubmit={SignInWithEmail}>
               <TextField
                 variant="outlined"
                 margin="normal"
@@ -77,6 +109,7 @@ const Login = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                onChange={(e)=> setLoginForm({...loginForm,email: e.target.value})}
               />
               <TextField
                 variant="outlined"
@@ -88,6 +121,7 @@ const Login = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                onChange={(e)=> setLoginForm({...loginForm,password: e.target.value})}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -103,12 +137,12 @@ const Login = () => {
                 Sign In
               </Button>
               <Grid2 container sx={{display: 'flex', justifyContent: 'space-between'}}>
-                <Grid2 item xs>
+                <Grid2>
                   <Link to={"#"} variant="body2">
                     Forgot password?
                   </Link>
                 </Grid2>
-                <Grid2 item>
+                <Grid2>
                   <Link to={"/signup"} variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>

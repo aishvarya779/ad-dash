@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/Layout';
+import {auth} from './../firebase';
+
 // import Avatar from '@mui/core/Avatar';
 // import Button from '@mui/core/Button';
 // import CssBaseline from '@mui/core/CssBaseline';
@@ -24,6 +26,8 @@ import {
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import LoginBg from './../images/login_bg.jpg';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -54,7 +58,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const Signup = () => {
+  const navigate = useNavigate();
+  const [form,setForm] =useState({
+    email: '',
+    password: ''
+  })
   const classes = useStyles();
+  const signUpWithEmail = async(e)=> {
+    e.preventDefault();
+    if(!form.email || !form.password) {
+      console.error('Please provide required email, password');
+      return;
+    }
+    try{
+      const userCred = await createUserWithEmailAndPassword(auth,form.email,form.password);
+        console.log("userCred", userCred);
+        localStorage.setItem('login', userCred.user.accessToken);
+        navigate('/')
+    }catch(error){
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(error);
+      console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+    }
+  }
   return (
     <>
       
@@ -67,9 +94,9 @@ const Signup = () => {
             <Typography component="h1" variant="h5">
               Sign up
             </Typography>
-            <form className={classes.form} noValidate>
+            <form className={classes.form} onSubmit={signUpWithEmail}>
               <Grid2 container spacing={2}>
-                <Grid2 item size={{xs: 12, sm: 6}}>
+                <Grid2 size={{xs: 12, sm: 6}}>
                   <TextField
                     autoComplete="fname"
                     name="firstName"
@@ -81,7 +108,7 @@ const Signup = () => {
                     autoFocus
                   />
                 </Grid2>
-                <Grid2 item size={{xs: 12, sm: 6}}>
+                <Grid2 size={{xs: 12, sm: 6}}>
                   <TextField
                     variant="outlined"
                     required
@@ -92,7 +119,7 @@ const Signup = () => {
                     autoComplete="lname"
                   />
                 </Grid2>
-                <Grid2 item size={{xs: 12}}>
+                <Grid2 size={{xs: 12}}>
                   <TextField
                     variant="outlined"
                     required
@@ -101,9 +128,10 @@ const Signup = () => {
                     label="Email Address"
                     name="email"
                     autoComplete="email"
+                    onChange={(e)=> setForm({...form, email: e.target.value})}
                   />
                 </Grid2>
-                <Grid2 item size={{xs: 12}}>
+                <Grid2 size={{xs: 12}}>
                   <TextField
                     variant="outlined"
                     required
@@ -113,9 +141,10 @@ const Signup = () => {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    onChange={(e)=> setForm({...form, password: e.target.value})}
                   />
                 </Grid2>
-                <Grid2 item size={{xs: 12,}}>
+                <Grid2 size={{xs: 12,}}>
                   <FormControlLabel
                     control={
                       <Checkbox value="allowExtraEmails" color="primary" />
@@ -135,7 +164,7 @@ const Signup = () => {
                 Sign Up
               </Button>
               <Grid2 container justify="flex-end">
-                <Grid2 item>
+                <Grid2>
                   <Link to={"/login"} variant="body2">
                     Already have an account? Sign in
                   </Link>
