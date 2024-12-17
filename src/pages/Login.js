@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 // import Layout from '../components/Layout';
 import { Link } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import {auth} from './../firebase';
+import { auth } from './../firebase';
 import {
   Typography,
   Checkbox,
@@ -18,6 +18,10 @@ import { makeStyles } from '@mui/styles';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import LoginBg from './../images/login_bg.jpg';
 import { useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Alert from '@mui/material/Alert';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,13 +56,29 @@ const Login = () => {
   const navigate = useNavigate();
   const classes = useStyles();
   const [loginForm, setLoginForm] = useState({
-    email:'',
-    password: ''
-  })
+    email: '',
+    password: '',
+  });
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event,
+    reason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
   const SignInWithEmail = async (e) => {
     e.preventDefault();
     if (!loginForm.email || !loginForm.password) {
-      console.error("Provide Email and Password");
+      console.error('Provide Email and Password');
       return;
     }
     try {
@@ -70,23 +90,36 @@ const Login = () => {
 
       const user = userCredential.user;
       console.log(user);
-      localStorage.setItem('login', user.accessToken)
-      navigate('/')
+      localStorage.setItem('login', user.accessToken);
+      navigate('/');
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error) {
       const errorCode = error.code;
       const errorMessage = error.message;
-
-      console.log("errorCode:", errorCode, "errorMessage:", errorMessage);
+      handleClick()
+      console.log('errorCode:', errorCode, 'errorMessage:', errorMessage);
     }
   };
+
+  const action = (
+    <>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </>
+  );
   return (
     <>
       <Grid2 container component="main" className={classes.root}>
         <CssBaseline />
-        <Grid2 size={{sm:4, md:7}} className={classes.image} />
+        <Grid2 size={{ sm: 4, md: 7 }} className={classes.image} />
         <Grid2
-          size={{xs:12, sm:8, md:5}}
+          size={{ xs: 12, sm: 8, md: 5 }}
           component={Paper}
           elevation={6}
           square
@@ -109,7 +142,9 @@ const Login = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
-                onChange={(e)=> setLoginForm({...loginForm,email: e.target.value})}
+                onChange={(e) =>
+                  setLoginForm({ ...loginForm, email: e.target.value })
+                }
               />
               <TextField
                 variant="outlined"
@@ -121,7 +156,9 @@ const Login = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-                onChange={(e)=> setLoginForm({...loginForm,password: e.target.value})}
+                onChange={(e) =>
+                  setLoginForm({ ...loginForm, password: e.target.value })
+                }
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -136,14 +173,17 @@ const Login = () => {
               >
                 Sign In
               </Button>
-              <Grid2 container sx={{display: 'flex', justifyContent: 'space-between'}}>
+              <Grid2
+                container
+                sx={{ display: 'flex', justifyContent: 'space-between' }}
+              >
                 <Grid2>
-                  <Link to={"#"} variant="body2">
+                  <Link to={'#'} variant="body2">
                     Forgot password?
                   </Link>
                 </Grid2>
                 <Grid2>
-                  <Link to={"/signup"} variant="body2">
+                  <Link to={'/signup'} variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid2>
@@ -155,6 +195,23 @@ const Login = () => {
           </div>
         </Grid2>
       </Grid2>
+      <Snackbar
+      anchorOrigin={{vertical: 'top',
+        horizontal: 'right',}}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        action={action}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="error"
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          Please provide valid credentials!!
+        </Alert>
+        </Snackbar>
     </>
   );
 };

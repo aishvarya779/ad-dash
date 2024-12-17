@@ -34,6 +34,11 @@ const Header = () => {
     navigate('/login');
   }
 
+  const goToProfile = () => {
+    handleClose();
+    navigate('/profile');
+  }
+
   const toggleDrawer = (toggleState) => {
     setOpen(toggleState);
   };
@@ -117,7 +122,7 @@ const Header = () => {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <MenuItem onClick={goToProfile}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
               <MenuItem onClick={logOut}>Logout</MenuItem>
             </Menu>
